@@ -2,7 +2,7 @@
 """
 
 import pytest
-from mysql_tools import utilities as ut
+from pykn_mysqltools import utilities as ut
 
 class TestCSVObject:
     """Test CSVObject class.
