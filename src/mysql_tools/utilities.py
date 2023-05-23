@@ -1,4 +1,4 @@
-"""Utility functions/class(es) for interacting with a MySQL database.
+"""Utility functions/classes for interacting with a MySQL database.
 """
 
 import mysql.connector
@@ -25,8 +25,7 @@ def clean_headers(headers):
 
 
 def get_column_type(values):
-    """
-    Returns the MySQL data type that can hold all values in the given list.
+    """Returns the MySQL data type that can hold all values in the given list.
 
     Args:
         values (list): A list of mixed-type values.
@@ -53,8 +52,7 @@ def get_column_type(values):
 
 
 def get_value_type(value):
-    """
-    Returns the MySQL data type that can hold the given value.
+    """Returns the MySQL data type that can hold the given value.
 
     Args:
         value (str): The value to get the data type for.
@@ -109,7 +107,7 @@ class CSVObject:
 class DBConnection:
     """Wrapper class to abstract away some basic MySQL functions.
     """
-    def __init__(self, 
+    def __init__(self,
                  db_hostname,
                  db_username,
                  db_password,
@@ -137,8 +135,7 @@ class DBConnection:
 
 
     def insert(self, table, columns, values):
-        """
-        Inserts rows into a table.
+        """Inserts rows into a table.
 
         Args:
             table (str): The name of the table to insert into.
@@ -162,8 +159,7 @@ class DBConnection:
         return self.cursor.rowcount
 
     def drop_table(self, table):
-        """
-        Drops a table.
+        """Drops a table.
 
         Args:
             table (str): The name of the table to drop.
@@ -181,13 +177,13 @@ class DBConnection:
         # Commit the changes
         self.connection.commit()
 
-    def create_table(self, table, columns):
-        """
-        Creates a table.
+    def create_table(self, table, columns, key):
+        """Creates a table.
 
         Args:
             table (str): The name of the table to create.
-            columns (list): List of strings representing the columns to create.
+            columns (list): List of tuples (column_name, column_data_type).
+            key (int): Index of column to designate as primary key.
 
         Returns:
             None
@@ -196,8 +192,8 @@ class DBConnection:
         # Build the SQL statement
         columns_string = ""
         for column in columns:
-            columns_string.join(f"{column} VARCHAR(255), ")
-        key_string = columns[0]
+            columns_string.join(f"{column[0]} {column[1]}, ")
+        key_string = columns[key][0]
         sql = f"CREATE TABLE {table} \
             ({columns_string}PRIMARY KEY ({key_string}))"
 
@@ -208,8 +204,7 @@ class DBConnection:
         self.connection.commit()
 
     def import_csv(self, csv_file, table):
-        """
-        Imports a CSV file into a table.
+        """Imports a CSV file into a table.
 
         Args:
             csv_file (str): The path to the CSV file to import.
@@ -219,19 +214,25 @@ class DBConnection:
             None
         """
 
+        # Wrap CSV in CSVObject class
         csv_object = CSVObject(csv_file)
+        # Determine data type of columns
+        header_data_types = [
+            get_column_type(column) for column in csv_object.columns
+        ]
+        # Create list of tuples with column name and data type
+        sql_columns = zip(csv_object.clean_headers, header_data_types)
 
         # Create the table if it doesn't exist
         if not self.table_exists(table):
-            self.create_table(table, csv_object.clean_headers)
+            self.create_table(table, sql_columns, 0)
 
         # Insert the rows into the table
         for row in csv_object.rows:
             self.insert(table, csv_object.clean_headers, row)
 
     def table_exists(self, table):
-        """
-        Checks if a table exists.
+        """Checks if a table exists.
 
         Args:
             table (str): The name of the table to check.
@@ -249,4 +250,3 @@ class DBConnection:
 
         # Check the results
         return self.cursor.fetchone() is not None
-
