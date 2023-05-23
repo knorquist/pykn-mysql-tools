@@ -39,11 +39,11 @@ class TestGetValueType:
 
     def test_text(self):
         varchar_255 = ""
-        for i in range(0,255):
+        for _ in range(0,255):
             varchar_255 += "A"
         assert ut.get_value_type(varchar_255) == "VARCHAR(255)"
         text = ""
-        for i in range(0,65535):
+        for _ in range(0,65535):
             text += "A"
         assert ut.get_value_type(text) == "TEXT"
 
@@ -51,11 +51,11 @@ class TestGetValueType:
     @pytest.mark.skip(reason="Typically freezes up.")
     def test_big_text(self):
         medium_text = ""
-        for i in range(0,16777215):
+        for _ in range(0,16777215):
             medium_text += "A"
         assert ut.get_value_type(medium_text) == "MEDIUMTEXT"
         long_text = ""
-        for i in range(0,4294967295):
+        for _ in range(0,4294967295):
             long_text += "A"
         assert ut.get_value_type(long_text) == "LONGTEXT"
         with pytest.raises(Exception):

@@ -109,7 +109,12 @@ class CSVObject:
 class DBConnection:
     """Wrapper class to abstract away some basic MySQL functions.
     """
-    def __init__(self, db_hostname, db_username, db_password, db_schema, db_port):
+    def __init__(self, 
+                 db_hostname,
+                 db_username,
+                 db_password,
+                 db_schema,
+                 db_port):
         self.connection = mysql.connector.connect(
             host=db_hostname,
             user=db_username,
@@ -193,7 +198,8 @@ class DBConnection:
         for column in columns:
             columns_string.join(f"{column} VARCHAR(255), ")
         key_string = columns[0]
-        sql = f"CREATE TABLE {table} ({columns_string}PRIMARY KEY ({key_string}))"
+        sql = f"CREATE TABLE {table} \
+            ({columns_string}PRIMARY KEY ({key_string}))"
 
         # Execute the SQL statement
         self.cursor.execute(sql)
@@ -235,7 +241,8 @@ class DBConnection:
         """
 
         # Build the SQL statement
-        sql = f"SELECT 1 FROM information_schema.tables WHERE table_name = '{table}'"
+        sql = f"SELECT 1 FROM information_schema.tables \
+            WHERE table_name = '{table}'"
 
         # Execute the SQL statement
         self.cursor.execute(sql)
