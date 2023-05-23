@@ -221,7 +221,7 @@ class DBConnection:
             get_column_type(column) for column in csv_object.columns
         ]
         # Create list of tuples with column name and data type
-        sql_columns = zip(csv_object.clean_headers, header_data_types)
+        sql_columns = list(zip(csv_object.clean_headers, header_data_types))
 
         # Create the table if it doesn't exist
         if not self.table_exists(table):
