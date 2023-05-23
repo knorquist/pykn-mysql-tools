@@ -60,7 +60,7 @@ class TestGetValueType:
         assert ut.get_value_type(long_text) == "LONGTEXT"
         with pytest.raises(Exception):
             too_big = ""
-            for i in range(0,4294967296):
+            for _ in range(0,4294967296):
                 too_big += "A"
 
 
