@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pykn_mysql_tools"
+version = "0.0.1"
+authors = [
+  { name="Kylie Norquist", email="kylie.norquist@newbit.dev" },
+  ]
+description = "Utilities for interacting with MySQL and CSVs."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/knorquist/pykn_mysql_tools"
+"Bug tracker" = "https://github.com/knorquist/pykn_mysql_tools/issues"
