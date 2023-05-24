@@ -147,8 +147,10 @@ class DBConnection:
         """
 
         # Build the SQL statement
-        sql = f"INSERT INTO {table} ({columns}) VALUES ({', '.join(values)})"
+        columns_string = ", ".join(f"{column}" for column in columns)
+        sub_string = ", ".join(["%s" for _ in values])
 
+        sql = f"INSERT INTO {table} ({columns_string}) VALUES ({sub_string})"
 
         # Execute the SQL statement
         self.cursor.execute(sql, values)
@@ -157,6 +159,7 @@ class DBConnection:
         self.connection.commit()
 
         return self.cursor.rowcount
+
 
     def drop_table(self, table):
         """Drops a table.
@@ -177,7 +180,8 @@ class DBConnection:
         # Commit the changes
         self.connection.commit()
 
-    def create_table(self, table, columns, key):
+
+    def create_table(self, table, columns, key=0):
         """Creates a table.
 
         Args:
@@ -192,7 +196,7 @@ class DBConnection:
         # Build the SQL statement
         columns_string = ""
         for column in columns:
-            columns_string.join(f"{column[0]} {column[1]}, ")
+            columns_string += f"{column[0]} {column[1]}, "
         key_string = columns[key][0]
         sql = f"CREATE TABLE {table} \
             ({columns_string}PRIMARY KEY ({key_string}))"
@@ -202,6 +206,7 @@ class DBConnection:
 
         # Commit the changes
         self.connection.commit()
+
 
     def import_csv(self, csv_file, table):
         """Imports a CSV file into a table.
@@ -230,6 +235,7 @@ class DBConnection:
         # Insert the rows into the table
         for row in csv_object.rows:
             self.insert(table, csv_object.clean_headers, row)
+
 
     def table_exists(self, table):
         """Checks if a table exists.
