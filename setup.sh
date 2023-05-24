@@ -4,11 +4,11 @@
 
 #set -o errexit # Fail fast on errors
 
-required_packages=("python3")
+required_packages=("python3.10")
 exit_code=0
 
 # Check if this script is in the project directory
-if [[ ! $PWD == *"/pykn-mysql-tools" ]]; then
+if [[ ! $PWD == *"/pykn_mysqltools" ]]; then
     echo "This script should be run in the root directory of the project."
     echo "Current directory: ${PWD}"
     exit 1
@@ -33,7 +33,7 @@ echo "Total missing packages: ${missing_packages}"
 if [[ -e ./requirements.txt ]]; then
     if [[ ! -e ./venv/ ]]; then
         echo "Creating virtual environment..."
-        python3 -m venv ./venv
+        python3.10 -m venv ./venv
     fi
     echo "Activating virtual environment..."
     source ./venv/bin/activate
