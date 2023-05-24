@@ -120,7 +120,7 @@ class DBConnection:
             database=db_schema,
             port=db_port
         )
-        self.cursor = self.connection.cursor()
+        self.cursor = self.connection.cursor(buffered=True)
 
 
     def __str__(self):
