@@ -194,11 +194,11 @@ class DBConnection:
         """
 
         # Build the SQL statement
-        columns_string = ""
+        columns_str = ""
         for column in columns:
-            columns_string += f"{column[0]} {column[1]}, "
-        key_string = columns[key][0]
-        sql = f"CREATE TABLE {table} ({columns_string}PRIMARY KEY ({key_string}))"
+            columns_str += f"{column[0]} {column[1]}, "
+        key_str = columns[key][0]
+        sql = f"CREATE TABLE {table} ({columns_str}PRIMARY KEY ({key_str}))"
 
         # Execute the SQL statement
         self.cursor.execute(sql)
