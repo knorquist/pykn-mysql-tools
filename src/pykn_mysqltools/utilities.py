@@ -198,8 +198,7 @@ class DBConnection:
         for column in columns:
             columns_string += f"{column[0]} {column[1]}, "
         key_string = columns[key][0]
-        sql = f"CREATE TABLE {table} \
-            ({columns_string}PRIMARY KEY ({key_string}))"
+        sql = f"CREATE TABLE {table} ({columns_string}PRIMARY KEY ({key_string}))"
 
         # Execute the SQL statement
         self.cursor.execute(sql)
@@ -221,10 +220,12 @@ class DBConnection:
 
         # Wrap CSV in CSVObject class
         csv_object = CSVObject(csv_file)
+
         # Determine data type of columns
         header_data_types = [
             get_column_type(column) for column in csv_object.columns
         ]
+
         # Create list of tuples with column name and data type
         sql_columns = list(zip(csv_object.clean_headers, header_data_types))
 
@@ -248,8 +249,7 @@ class DBConnection:
         """
 
         # Build the SQL statement
-        sql = f"SELECT 1 FROM information_schema.tables \
-            WHERE table_name = '{table}'"
+        sql = f"SHOW TABLES LIKE '{table}'"
 
         # Execute the SQL statement
         self.cursor.execute(sql)
